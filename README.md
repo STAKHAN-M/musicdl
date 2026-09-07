@@ -33,25 +33,69 @@ playlists et log historique des runs.
 
 ## Prerequis
 
-- [uv](https://docs.astral.sh/uv/) — gestion Python + venv + deps
-- **ffmpeg** — conversion audio : `winget install Gyan.FFmpeg`
-- **deno** — runtime JS requis par yt-dlp anti-bot : `winget install DenoLand.Deno`
+Trois outils systeme + Python. Python 3.12 est installe automatiquement par
+`uv` (declare dans `.python-version`), sans toucher a votre Python systeme.
 
-Python 3.12 est installe automatiquement par `uv` (declare dans `.python-version`),
-sans toucher a votre Python systeme.
+### Windows (PowerShell)
+
+```powershell
+winget install astral-sh.uv        # gestionnaire Python + deps
+winget install Gyan.FFmpeg         # conversion audio
+winget install DenoLand.Deno       # runtime JS anti-bot yt-dlp
+```
+
+### macOS (Homebrew)
+
+```bash
+brew install uv
+brew install ffmpeg
+brew install deno
+```
+
+### Linux (Debian/Ubuntu)
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+sudo apt install ffmpeg
+curl -fsSL https://deno.land/install.sh | sh
+```
+
+### Linux (Arch)
+
+```bash
+sudo pacman -S uv ffmpeg deno
+```
 
 ## Installation
 
-```powershell
+```bash
 git clone https://github.com/STAKHAN-M/yt_music_dl.git
 cd yt_music_dl
 uv sync
 ```
 
+`uv sync` installe Python 3.12 (isole), cree le `.venv` local et installe les
+dependances Python (yt-dlp, spotdl, scdl, typer, rich) figees par `uv.lock`.
+
+### Alternative sans `uv` (pip + venv classique)
+
+Un `requirements.txt` est exporte depuis `uv.lock` pour les utilisateurs qui
+preferent pip. Python 3.12+ requis.
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate       # Linux/macOS
+# .venv\Scripts\activate        # Windows PowerShell
+pip install -r requirements.txt
+pip install -e .                # installe la commande `musicdl`
+```
+
 ## Utilisation
 
-```powershell
+```bash
 uv run musicdl
+# ou, en venv classique active :
+musicdl
 ```
 
 Au premier lancement, l'outil demande le dossier de destination puis affiche
