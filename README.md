@@ -66,6 +66,34 @@ curl -fsSL https://deno.land/install.sh | sh
 sudo pacman -S uv ffmpeg deno
 ```
 
+### Android (Termux)
+
+deno n'est pas disponible sur Termux, mais **yt-dlp accepte aussi Node.js**
+comme runtime JavaScript — c'est le remplacement.
+
+```bash
+pkg update && pkg upgrade
+pkg install git python ffmpeg nodejs
+pkg install uv        # ou : pip install uv si indisponible
+```
+
+Pour ecrire les fichiers dans le stockage partage Android (accessible aux
+lecteurs de musique) :
+
+```bash
+termux-setup-storage
+```
+
+Ca cree `~/storage/` avec des liens vers les dossiers Android standards. Bons
+choix de destination a renseigner dans musicdl :
+
+- `~/storage/music/` — dossier Music officiel Android, indexe par les lecteurs
+- `~/storage/shared/Musique/` — racine SD
+
+**Astuce batterie** : desactive l'optimisation batterie pour Termux dans les
+parametres Android, sinon les longs telechargements peuvent etre tues en
+arriere-plan.
+
 ## Installation
 
 ```bash
