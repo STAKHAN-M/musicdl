@@ -1,0 +1,19 @@
+[project]
+name = "musicdl"
+version = "0.1.0"
+description = "CLI wrapper around yt-dlp, scdl and spotdl to download music from YouTube, YouTube Music, SoundCloud and Spotify into a clean library."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "scdl>=3.0.8",
+    "spotdl>=4.5.2",
+    "typer>=0.27.2",
+    "yt-dlp>=2026.8.19",
+]
+
+[project.scripts]
+musicdl = "musicdl:main"
+
+[build-system]
+requires = ["uv_build>=0.12.10,<0.13.0"]
+build-backend = "uv_build"
