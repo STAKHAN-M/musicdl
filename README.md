@@ -1,12 +1,11 @@
 # musicdl
 
-> 🇫🇷 Version française · [🇬🇧 English version](README.en.md)
+> 🇬🇧 English · [🇫🇷 Version française](README.fr.md)
 
-CLI interactif qui orchestre `yt-dlp`, `spotdl` et `scdl` pour telecharger de
-la musique depuis **YouTube / YouTube Music / Spotify / SoundCloud** dans une
-arborescence propre `Artiste/Album/N° - Titre.mp3`, avec deduplication, retry
-automatique sur erreur 403, generation `.m3u` pour les playlists et log
-historique des runs.
+Interactive CLI that orchestrates `yt-dlp`, `spotdl` and `scdl` to download
+music from **YouTube / YouTube Music / Spotify / SoundCloud** into a clean
+`Artist/Album/N° - Title.mp3` tree, with deduplication, automatic retry on
+HTTP 403 errors, `.m3u` generation for playlists and per-run history log.
 
 ```
 ███╗   ███╗██╗   ██╗███████╗██╗ ██████╗██████╗ ██╗
@@ -17,27 +16,27 @@ historique des runs.
 ╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝╚═════╝ ╚══════╝
 ```
 
-## Fonctionnalites
+## Features
 
-- **Menu interactif** style `theHarvester` : selection de la source, du type de
-  contenu (titre / playlist / album), du format (MP3 / MP4 sur YouTube), et de
-  la qualite audio (best / 320 / 192 / 128 kbps).
-- **Batch** : traiter une URL, plusieurs URLs collees, ou un fichier `.txt`.
-- **Dossier de destination** memorise dans `~/.musicdl/config.json`, avec
-  defaut adapte a la plateforme (Windows/macOS/Linux/Termux).
-- **Deduplication** via `--download-archive` yt-dlp (une seule copie par ID).
-- **Retry automatique** sur erreur `HTTP 403` YouTube avec un client
-  alternatif (`--extractor-args youtube:player_client=default,web,mweb`).
-- **Generation `.m3u`** dans le dossier de chaque playlist telechargee, prete
-  a etre importee dans Navidrome / Symfonium.
-- **Recap agrege** apres chaque run (OK / skip / erreurs, detail par URL).
-- **Historique** de chaque run dans `~/.musicdl/history.log`.
-- **Detection au demarrage** des dependances : les sources indisponibles sont
-  affichees grisees plutot que de crasher au telechargement.
+- **Interactive menu** in the `theHarvester` style: pick a source, content type
+  (track / playlist / album), format (MP3 / MP4 for YouTube), audio quality
+  (best / 320 / 192 / 128 kbps).
+- **Batch mode**: one URL, several pasted URLs, or a `.txt` file.
+- **Destination folder** remembered in `~/.musicdl/config.json`, with a
+  platform-adapted default (Windows/macOS/Linux/Termux).
+- **Deduplication** via yt-dlp's `--download-archive` (one copy per video ID).
+- **Automatic retry** on YouTube `HTTP 403` errors with a fallback player
+  client (`--extractor-args youtube:player_client=default,web,mweb`).
+- **`.m3u` generation** in each downloaded playlist folder, ready to be
+  imported into Navidrome / Symfonium.
+- **Aggregated recap** after every run (OK / skip / errors, per-URL breakdown).
+- **Run history** in `~/.musicdl/history.log`.
+- **Startup dependency detection**: unavailable sources are shown grayed out
+  rather than crashing mid-download.
 
-## Installation rapide
+## Quick install
 
-### Toutes plateformes (script auto)
+### All platforms (auto script)
 
 ```bash
 git clone https://github.com/STAKHAN-M/musicdl.git
@@ -45,19 +44,19 @@ cd musicdl
 ./install.sh
 ```
 
-Le script detecte automatiquement l'environnement (Termux / uv / pip) et
-installe la bonne voie.
+The script detects the environment (Termux / uv / pip) and picks the right
+installation path.
 
-## Prerequis systeme
+## System prerequisites
 
-Trois outils systeme (installes une seule fois, en dehors du projet).
+Three system tools (install once, outside the project).
 
 ### Windows (PowerShell)
 
 ```powershell
-winget install astral-sh.uv        # gestionnaire Python + deps
-winget install Gyan.FFmpeg         # conversion audio
-winget install DenoLand.Deno       # runtime JS anti-bot yt-dlp
+winget install astral-sh.uv        # Python + deps manager
+winget install Gyan.FFmpeg         # audio conversion
+winget install DenoLand.Deno       # JS runtime for yt-dlp anti-bot
 ```
 
 ### macOS (Homebrew)
@@ -82,9 +81,9 @@ sudo pacman -S uv ffmpeg deno
 
 ### Android (Termux)
 
-**Note** : Spotify n'est **pas disponible** sur Termux (spotdl depend de
-pydantic-core, une extension Rust sans wheel Android). YouTube, YT Music et
-SoundCloud fonctionnent normalement. Node.js remplace deno comme runtime JS.
+**Note**: Spotify is **not available** on Termux (spotdl depends on
+pydantic-core, a Rust extension without an Android wheel). YouTube, YT Music
+and SoundCloud work normally. Node.js replaces deno as the JS runtime.
 
 ```bash
 pkg install git python ffmpeg nodejs uv
@@ -94,152 +93,150 @@ cd musicdl
 musicdl
 ```
 
-Pour ecrire dans le stockage partage Android (accessible aux lecteurs de
-musique), lance `termux-setup-storage` avant le premier lancement de musicdl :
+To write files to Android shared storage (accessible to music players), run
+`termux-setup-storage` before the first musicdl launch:
 
 ```bash
 termux-setup-storage
 ```
 
-Le dossier propose par defaut sera alors `~/storage/music/`.
+The default proposed folder then becomes `~/storage/music/`.
 
-## Installation manuelle (sans install.sh)
+## Manual installation (without install.sh)
 
-### Voie uv (recommandee, PC)
+### uv path (recommended, desktop)
 
 ```bash
 git clone https://github.com/STAKHAN-M/musicdl.git
 cd musicdl
-uv sync --extra spotify     # ou juste `uv sync` sans Spotify
+uv sync --extra spotify     # or just `uv sync` without Spotify
 uv run musicdl
 ```
 
-### Voie pip + venv classique
+### pip + classic venv path
 
 ```bash
 git clone https://github.com/STAKHAN-M/musicdl.git
 cd musicdl
 python3.12 -m venv .venv
-source .venv/bin/activate       # ou .venv\Scripts\activate sur Windows
-pip install -e ".[spotify]"     # ou pip install -e . sans Spotify
+source .venv/bin/activate       # or .venv\Scripts\activate on Windows
+pip install -e ".[spotify]"     # or pip install -e . without Spotify
 musicdl
 ```
 
-## Utilisation
+## Usage
 
 ```bash
 uv run musicdl
-# ou, en venv classique active :
+# or, with an activated classic venv:
 musicdl
 ```
 
-Au premier lancement, l'outil demande le dossier de destination puis affiche
-le menu :
+On the first launch, the tool asks for a destination folder, then shows the
+menu:
 
 ```
 MUSICDL
-  1. Mise a jour des paquets
+  1. Update packages
   2. YouTube / YouTube Music
-  3. Spotify                       [indisponible]  <- si spotdl absent
+  3. Spotify                       [unavailable]  <- if spotdl is missing
   4. SoundCloud
-  5. Changer le dossier de destination
-  0. Quitter
+  5. Change destination folder
+  0. Quit
 ```
 
-Chaque source enchaine ensuite :
-`Type de contenu → [Format YT] → [Qualite audio] → Source des URLs → Telechargement → Recap`
+Each source then walks through:
+`Content type → [YT format] → [audio quality] → URL source → Download → Recap`
 
-## Arborescence de sortie
+## Output tree
 
 ```
-<dossier>/
-├─ Artiste/
+<folder>/
+├─ Artist/
 │   └─ Album/
-│       ├─ 01 - Titre A.mp3
-│       └─ 02 - Titre B.mp3
-└─ Ma Playlist/
-    ├─ 001 - Artiste - Titre.mp3
-    ├─ 002 - Artiste - Titre.mp3
-    └─ Ma Playlist.m3u
+│       ├─ 01 - Track A.mp3
+│       └─ 02 - Track B.mp3
+└─ My Playlist/
+    ├─ 001 - Artist - Track.mp3
+    ├─ 002 - Artist - Track.mp3
+    └─ My Playlist.m3u
 ```
 
-## Structure du projet
+## Project layout
 
 ```
 src/musicdl/
-├─ __init__.py          # entree main()
-├─ menu.py              # menus interactifs + banner
-├─ config.py            # ~/.musicdl/config.json + destination par plateforme
+├─ __init__.py          # main() entry point
+├─ menu.py              # interactive menus + banner
+├─ config.py            # ~/.musicdl/config.json + platform-adapted default
 ├─ history.py           # ~/.musicdl/history.log
-├─ deps.py              # detection deps optionnelles au demarrage
-├─ runner.py            # subprocess streaming + parsing OK/skip/err + detection 403
-├─ m3u.py               # generation .m3u post-download pour playlists
+├─ deps.py              # optional-dependency detection at startup
+├─ runner.py            # streaming subprocess + OK/skip/err parsing + 403 detection
+├─ m3u.py               # post-download .m3u generation for playlists
 └─ backends/
-    ├─ youtube.py       # wrapper yt-dlp (mp3/mp4, qualite, retry 403)
-    ├─ spotify.py       # wrapper spotdl (extra optionnel)
-    └─ soundcloud.py    # wrapper scdl
+    ├─ youtube.py       # yt-dlp wrapper (mp3/mp4, quality, 403 retry)
+    ├─ spotify.py       # spotdl wrapper (optional extra)
+    └─ soundcloud.py    # scdl wrapper
 ```
 
-## Extras optionnels
+## Optional extras
 
-Spotify est desormais un extra optionnel (evite d'installer pydantic-core sur
-les plateformes qui ne le supportent pas, notamment Android/Termux).
+Spotify is now an optional extra (avoids installing pydantic-core on
+platforms that don't support it, notably Android/Termux).
 
 ```bash
-uv sync --extra spotify              # avec uv
-pip install -e ".[spotify]"          # avec pip
+uv sync --extra spotify              # with uv
+pip install -e ".[spotify]"          # with pip
 ```
 
-Sans cet extra, l'entree "Spotify" du menu apparait grisee et refuse la
-selection avec un message clair.
+Without this extra, the "Spotify" menu entry appears grayed out and refuses
+the selection with a clear message.
 
 ## Roadmap
 
-- [x] Phase 0 : scaffold, deps, structure
-- [x] Phase 1 : CLI interactif, routing par source
-- [x] Phase 2 : gestion 403, dedup, `.m3u`, batch, qualite audio
-- [x] Phase 3 : garde-fous dependances, install multi-plateforme, Termux
-- [ ] Phase 4 : traitement par lot avance, resume interrompu
-- [ ] Phase 5 (optionnel) : backend FastAPI + UI web + integration Navidrome/NAS
+- [x] Phase 0: scaffold, deps, structure
+- [x] Phase 1: interactive CLI, per-source routing
+- [x] Phase 2: 403 handling, dedup, `.m3u`, batch, audio quality
+- [x] Phase 3: dependency guards, cross-platform install, Termux
+- [ ] Phase 4: advanced batch, interrupted-run resume
+- [ ] Phase 5 (optional): FastAPI backend + web UI + Navidrome/NAS integration
 
-## Credits & licences des dependances
+## Credits & dependency licenses
 
-Ce projet **ne fait pas** le telechargement lui-meme : il orchestre trois
-outils open source excellents.
+This project **does not perform** the downloads itself — it orchestrates
+three excellent open-source tools.
 
-| Outil | Licence | Auteurs / Projet |
+| Tool | License | Authors / Project |
 |---|---|---|
-| [yt-dlp](https://github.com/yt-dlp/yt-dlp) | Unlicense (domaine public) | yt-dlp contributors (fork de youtube-dl) |
+| [yt-dlp](https://github.com/yt-dlp/yt-dlp) | Unlicense (public domain) | yt-dlp contributors (youtube-dl fork) |
 | [spotdl](https://github.com/spotDL/spotify-downloader) | MIT | spotDL contributors |
-| [scdl](https://github.com/flyingrub/scdl) | GPL-2.0 | Nicolas Casajus (`flyingrub`) et contributeurs |
+| [scdl](https://github.com/flyingrub/scdl) | GPL-2.0 | Nicolas Casajus (`flyingrub`) and contributors |
 | [typer](https://github.com/tiangolo/typer) | MIT | Sebastian Ramirez (`tiangolo`) |
 | [rich](https://github.com/Textualize/rich) | MIT | Will McGugan / Textualize |
 | [hatchling](https://github.com/pypa/hatch) | MIT | PyPA / Ofek Lev |
 
-**Note sur scdl (GPL-2.0)** : scdl est declare en dependance (installe par
-`uv sync`) et invoque en sous-processus (`python -m scdl`). Il n'est ni
-statiquement lie ni redistribue par ce projet, ce qui reste conforme a la
-GPL-2.0 (agregation). Toute redistribution _bundlant_ scdl devrait respecter
-la GPL.
+**About scdl (GPL-2.0)**: scdl is declared as a dependency (installed by
+`uv sync`) and invoked as a subprocess (`python -m scdl`). It is neither
+statically linked nor redistributed by this project, which remains compliant
+with GPL-2.0 (mere aggregation). Any redistribution _bundling_ scdl would
+need to comply with the GPL.
 
-Outils systeme utilises mais non embarques :
+System tools used but not shipped:
 
-| Outil | Licence | Projet |
+| Tool | License | Project |
 |---|---|---|
-| [ffmpeg](https://ffmpeg.org/) | LGPL / GPL selon build | FFmpeg team |
+| [ffmpeg](https://ffmpeg.org/) | LGPL / GPL depending on build | FFmpeg team |
 | [deno](https://deno.land/) | MIT | Deno Land Inc. |
 | [Node.js](https://nodejs.org/) | MIT | OpenJS Foundation |
 
-## Licence
+## License
 
-Le code de **ce projet** est publie sous licence [MIT](LICENSE).
-Voir la section _Credits & licences_ ci-dessus pour les licences des
-dependances.
+**This project's** code is released under the [MIT License](LICENSE).
+See the _Credits & licenses_ section above for dependency licenses.
 
 ## Legal / usage
 
-Outil a **usage strictement personnel**. L'utilisation de yt-dlp / spotdl /
-scdl sur du contenu librement accessible releve d'une zone toleree mais
-contraire aux CGU des plateformes. L'utilisateur est seul responsable du
-respect des lois locales sur le droit d'auteur et des conditions
-d'utilisation des services concernes.
+Strictly **personal-use** tool. Using yt-dlp / spotdl / scdl on freely
+accessible content sits in a tolerated but ToS-noncompliant zone with respect
+to the platforms. The user alone is responsible for complying with local
+copyright laws and the terms of service of the concerned platforms.
