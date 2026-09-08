@@ -26,6 +26,14 @@ def download(
     dest: Path,
     quality: Quality = "best",
 ) -> RunResult:
+    import importlib.util
+
+    if importlib.util.find_spec("spotdl") is None:
+        raise RuntimeError(
+            "spotdl n'est pas installe. Installer l'extra spotify : "
+            "`uv sync --extra spotify` ou `pip install \"musicdl[spotify]\"`. "
+            "(Non supporte sur Termux / Android.)"
+        )
     dest.mkdir(parents=True, exist_ok=True)
     template = _template(dest, content_type)
     bitrate = "auto" if quality == "best" else f"{quality}k"

@@ -8,7 +8,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
 
-from musicdl import config, history, m3u
+from musicdl import config, deps, history, m3u
 from musicdl.backends import soundcloud, spotify, youtube
 from musicdl.runner import RunResult, aggregate
 
@@ -34,17 +34,32 @@ def _banner(dest: Path) -> None:
             border_style="cyan",
         )
     )
+    warn = config.storage_warning()
+    if warn:
+        console.print(Panel.fit(f"[yellow]{warn}[/yellow]", border_style="yellow"))
+    if not deps.FFMPEG.available:
+        console.print(f"[yellow]! {deps.FFMPEG.label} manquant : {deps.FFMPEG.hint}[/yellow]")
+    if not deps.js_runtime_ok():
+        console.print(f"[yellow]! {deps.js_runtime_hint()}[/yellow]")
     console.print()
+
+
+def _fmt_source(idx: int, dep: "deps.Dependency") -> str:
+    if dep.available:
+        return f"  [bold cyan]{idx}.[/bold cyan] {dep.label}"
+    return (
+        f"  [dim]{idx}. {dep.label}  [red][indisponible][/red][/dim]"
+    )
 
 
 def main_menu() -> None:
     while True:
         dest = config.get_download_folder()
         _banner(dest)
-        console.print("  [bold cyan]1.[/bold cyan] Mise a jour des paquets (yt-dlp, spotdl, scdl)")
-        console.print("  [bold cyan]2.[/bold cyan] YouTube / YouTube Music")
-        console.print("  [bold cyan]3.[/bold cyan] Spotify")
-        console.print("  [bold cyan]4.[/bold cyan] SoundCloud")
+        console.print("  [bold cyan]1.[/bold cyan] Mise a jour des paquets")
+        console.print(_fmt_source(2, deps.YOUTUBE))
+        console.print(_fmt_source(3, deps.SPOTIFY))
+        console.print(_fmt_source(4, deps.SOUNDCLOUD))
         console.print("  [bold cyan]5.[/bold cyan] Changer le dossier de destination")
         console.print("  [bold cyan]0.[/bold cyan] Quitter\n")
         choice = Prompt.ask(
@@ -57,13 +72,26 @@ def main_menu() -> None:
         if choice == "1":
             _update_packages()
         elif choice == "2":
-            _youtube_flow(dest)
+            if _guard(deps.YOUTUBE):
+                _youtube_flow(dest)
         elif choice == "3":
-            _spotify_flow(dest)
+            if _guard(deps.SPOTIFY):
+                _spotify_flow(dest)
         elif choice == "4":
-            _soundcloud_flow(dest)
+            if _guard(deps.SOUNDCLOUD):
+                _soundcloud_flow(dest)
         elif choice == "5":
             config.prompt_download_folder()
+
+
+def _guard(dep: "deps.Dependency") -> bool:
+    if dep.available:
+        return True
+    console.print(f"\n[red]{dep.label} indisponible.[/red]")
+    if dep.hint:
+        console.print(f"[dim]{dep.hint}[/dim]")
+    _pause()
+    return False
 
 
 def _update_packages() -> None:

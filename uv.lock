@@ -577,18 +577,23 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "scdl" },
-    { name = "spotdl" },
     { name = "typer" },
     { name = "yt-dlp" },
+]
+
+[package.optional-dependencies]
+spotify = [
+    { name = "spotdl" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "scdl", specifier = ">=3.0.8" },
-    { name = "spotdl", specifier = ">=4.5.2" },
+    { name = "spotdl", marker = "extra == 'spotify'", specifier = ">=4.5.2" },
     { name = "typer", specifier = ">=0.27.2" },
     { name = "yt-dlp", specifier = ">=2026.8.19" },
 ]
+provides-extras = ["spotify"]
 
 [[package]]
 name = "mutagen"

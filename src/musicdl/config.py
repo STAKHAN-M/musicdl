@@ -1,10 +1,35 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 CONFIG_DIR = Path.home() / ".musicdl"
 CONFIG_FILE = CONFIG_DIR / "config.json"
+
+
+def is_termux() -> bool:
+    return "com.termux" in os.environ.get("PREFIX", "")
+
+
+def default_destination() -> Path:
+    """Dossier propose au premier lancement, adapte a la plateforme."""
+    if is_termux():
+        shared = Path.home() / "storage" / "music"
+        if shared.is_dir():
+            return shared
+        # ~/storage absent : termux-setup-storage n'a pas ete lance
+    return Path.home() / "Music"
+
+
+def storage_warning() -> str | None:
+    if is_termux() and not (Path.home() / "storage").is_dir():
+        return (
+            "Stockage partage Android non configure.\n"
+            "Lance `termux-setup-storage` puis relance musicdl pour que tes "
+            "fichiers soient visibles par les lecteurs de musique."
+        )
+    return None
 
 
 def load_config() -> dict:
@@ -38,7 +63,7 @@ def prompt_download_folder() -> Path:
     from rich.prompt import Prompt
 
     console = Console()
-    default = str(Path.home() / "Musique")
+    default = str(default_destination())
     while True:
         raw = Prompt.ask(
             "[bold cyan]Dossier de destination[/bold cyan]", default=default
