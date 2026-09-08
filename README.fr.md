@@ -1,6 +1,6 @@
 # musicdl
 
-> 🇫🇷 Version française · [🇬🇧 English version](README.en.md)
+> [🇬🇧 English](README.md) · 🇫🇷 Version française
 
 CLI interactif qui orchestre `yt-dlp`, `spotdl` et `scdl` pour telecharger de
 la musique depuis **YouTube / YouTube Music / Spotify / SoundCloud** dans une
