@@ -35,93 +35,71 @@ historique des runs.
 - **Detection au demarrage** des dependances : les sources indisponibles sont
   affichees grisees plutot que de crasher au telechargement.
 
-## Installation rapide
+## Installation
 
-### Toutes plateformes (script auto)
+Les scripts d'installation s'occupent de **tout** : detection de l'OS,
+installation des prerequis systeme (`uv`, `ffmpeg`, `deno`/`nodejs`, et `git`
+si manquant), puis sync du projet. Prevu pour les non-devs.
 
-```bash
-git clone https://github.com/STAKHAN-M/musicdl.git
-cd musicdl
-./install.sh
-```
-
-Le script detecte automatiquement l'environnement (Termux / uv / pip) et
-installe la bonne voie.
-
-## Prerequis systeme
-
-Trois outils systeme (installes une seule fois, en dehors du projet).
-
-### Windows (PowerShell)
+### Windows
 
 ```powershell
-winget install astral-sh.uv        # gestionnaire Python + deps
-winget install Gyan.FFmpeg         # conversion audio
-winget install DenoLand.Deno       # runtime JS anti-bot yt-dlp
+git clone https://github.com/STAKHAN-M/musicdl.git
+cd musicdl
+Set-ExecutionPolicy -Scope Process Bypass -Force
+.\install.ps1
 ```
 
-### macOS (Homebrew)
+La derniere ligne autorise temporairement l'execution de scripts uniquement
+pour cette session PowerShell (aucune modification permanente).
+
+### macOS / Linux / Termux (Android)
 
 ```bash
+git clone https://github.com/STAKHAN-M/musicdl.git && cd musicdl && ./install.sh
+```
+
+Sur **Termux**, pense a lancer `termux-setup-storage` (une seule fois) pour
+que les fichiers telecharges soient visibles par les lecteurs de musique.
+Spotify n'est pas disponible sur Termux (pydantic-core n'a pas de wheel
+Android) — YouTube, YT Music et SoundCloud fonctionnent normalement.
+
+### Installation manuelle (fallback)
+
+Si tu preferes installer les prerequis toi-meme :
+
+```bash
+# Windows
+winget install astral-sh.uv Gyan.FFmpeg DenoLand.Deno
+
+# macOS
 brew install uv ffmpeg deno
-```
 
-### Linux (Debian/Ubuntu)
-
-```bash
+# Linux (Debian/Ubuntu)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 sudo apt install ffmpeg
 curl -fsSL https://deno.land/install.sh | sh
-```
 
-### Linux (Arch)
-
-```bash
+# Linux (Arch)
 sudo pacman -S uv ffmpeg deno
+
+# Termux
+pkg install python ffmpeg nodejs uv git
 ```
 
-### Android (Termux)
-
-**Note** : Spotify n'est **pas disponible** sur Termux (spotdl depend de
-pydantic-core, une extension Rust sans wheel Android). YouTube, YT Music et
-SoundCloud fonctionnent normalement. Node.js remplace deno comme runtime JS.
+Puis, depuis le repo clone :
 
 ```bash
-pkg install git python ffmpeg nodejs uv
-git clone https://github.com/STAKHAN-M/musicdl.git
-cd musicdl
-./install.sh
-musicdl
-```
-
-Pour ecrire dans le stockage partage Android (accessible aux lecteurs de
-musique), lance `termux-setup-storage` avant le premier lancement de musicdl :
-
-```bash
-termux-setup-storage
-```
-
-Le dossier propose par defaut sera alors `~/storage/music/`.
-
-## Installation manuelle (sans install.sh)
-
-### Voie uv (recommandee, PC)
-
-```bash
-git clone https://github.com/STAKHAN-M/musicdl.git
-cd musicdl
-uv sync --extra spotify     # ou juste `uv sync` sans Spotify
+uv sync --extra spotify     # ou `uv sync` pour sauter Spotify
 uv run musicdl
 ```
 
-### Voie pip + venv classique
+Ou la voie pip + venv classique :
 
 ```bash
-git clone https://github.com/STAKHAN-M/musicdl.git
-cd musicdl
 python3.12 -m venv .venv
 source .venv/bin/activate       # ou .venv\Scripts\activate sur Windows
-pip install -e ".[spotify]"     # ou pip install -e . sans Spotify
+pip install -e ".[spotify]"     # ou `pip install -e .` sans Spotify
 musicdl
 ```
 
