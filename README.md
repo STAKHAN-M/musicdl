@@ -165,15 +165,6 @@ pip install -e ".[spotify]"          # with pip
 Without this extra, the "Spotify" menu entry appears grayed out and refuses
 the selection with a clear message.
 
-## Roadmap
-
-- [x] Phase 0: scaffold, deps, structure
-- [x] Phase 1: interactive CLI, per-source routing
-- [x] Phase 2: 403 handling, dedup, `.m3u`, batch, audio quality
-- [x] Phase 3: dependency guards, cross-platform install, Termux
-- [ ] Phase 4: advanced batch, interrupted-run resume
-- [ ] Phase 5 (optional): FastAPI backend + web UI + Navidrome/NAS integration
-
 ## Credits & dependency licenses
 
 This project **does not perform** the downloads itself — it orchestrates
