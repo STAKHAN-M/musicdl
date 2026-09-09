@@ -2,20 +2,15 @@
 
 > [🇬🇧 English](README.md) · 🇫🇷 Version française
 
+<p align="center">
+  <img src="assets/musicdl-menu.svg" alt="Menu interactif musicdl" width="720">
+</p>
+
 CLI interactif qui orchestre `yt-dlp`, `spotdl` et `scdl` pour telecharger de
 la musique depuis **YouTube / YouTube Music / Spotify / SoundCloud** dans une
 arborescence propre `Artiste/Album/N° - Titre.mp3`, avec deduplication, retry
 automatique sur erreur 403, generation `.m3u` pour les playlists et log
 historique des runs.
-
-```
-███╗   ███╗██╗   ██╗███████╗██╗ ██████╗██████╗ ██╗
-████╗ ████║██║   ██║██╔════╝██║██╔════╝██╔══██╗██║
-██╔████╔██║██║   ██║███████╗██║██║     ██║  ██║██║
-██║╚██╔╝██║██║   ██║╚════██║██║██║     ██║  ██║██║
-██║ ╚═╝ ██║╚██████╔╝███████║██║╚██████╗██████╔╝███████╗
-╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝╚═════╝ ╚══════╝
-```
 
 ## Fonctionnalites
 
