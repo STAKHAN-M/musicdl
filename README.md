@@ -13,7 +13,7 @@ HTTP 403 errors, `.m3u` generation for playlists and per-run history log.
 
 ## Features
 
-- **Interactive menu** in the `theHarvester` style: pick a source, content type
+- **Interactive menu** pick a source, content type
   (track / playlist / album), format (MP3 / MP4 for YouTube), audio quality
   (best / 320 / 192 / 128 kbps).
 - **Batch mode**: one URL, several pasted URLs, or a `.txt` file.
